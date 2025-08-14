@@ -1,0 +1,320 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VeriGate - 人机验证组件演示</title><style>* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .demo-card h3 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .demo-card p {
+            color: #6b7280;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .verigate-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            display: none;
+        }
+
+        .result.success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .result.error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .integration-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .integration-section h2 {
+            color: #374151;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .code-block .comment {
+            color: #9ca3af;
+        }
+
+        .code-block .string {
+            color: #34d399;
+        }
+
+        .code-block .keyword {
+            color: #60a5fa;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }</style><script defer="defer" src="verigate.js"></script></head><body><div class="container"><div class="header"><h1>🛡️ VeriGate</h1><p>强大的人机验证组件 - 保护您的网站免受机器人攻击</p></div><div class="demo-grid"><div class="demo-card"><h3>默认主题</h3><p>标准的浅色主题，适合大多数网站使用。</p><div class="verigate-container"><div id="verigate-light"></div></div><div class="controls"><button class="btn btn-primary" onclick="resetWidget('light')">重置</button> <button class="btn btn-secondary" onclick="verifyToken('light')">验证令牌</button></div><div id="result-light" class="result"></div></div><div class="demo-card"><h3>深色主题</h3><p>深色主题，适合深色背景的网站。</p><div class="verigate-container"><div id="verigate-dark"></div></div><div class="controls"><button class="btn btn-primary" onclick="resetWidget('dark')">重置</button> <button class="btn btn-secondary" onclick="verifyToken('dark')">验证令牌</button></div><div id="result-dark" class="result"></div></div><div class="demo-card"><h3>紧凑尺寸</h3><p>更小的尺寸，适合空间有限的场景。</p><div class="verigate-container"><div id="verigate-compact"></div></div><div class="controls"><button class="btn btn-primary" onclick="resetWidget('compact')">重置</button> <button class="btn btn-secondary" onclick="verifyToken('compact')">验证令牌</button></div><div id="result-compact" class="result"></div></div><div class="demo-card"><h3>大尺寸</h3><p>更大的尺寸，提供更好的用户体验。</p><div class="verigate-container"><div id="verigate-large"></div></div><div class="controls"><button class="btn btn-primary" onclick="resetWidget('large')">重置</button> <button class="btn btn-secondary" onclick="verifyToken('large')">验证令牌</button></div><div id="result-large" class="result"></div></div></div><div class="integration-section"><h2>📚 集成指南</h2><div class="tabs"><div class="tab active" onclick="showTab('html')">HTML集成</div><div class="tab" onclick="showTab('js')">JavaScript API</div><div class="tab" onclick="showTab('server')">服务端验证</div></div><div id="html-tab" class="tab-content active"><h3>在HTML中使用</h3><div class="code-block"><span class="comment">&lt;!-- 引入VeriGate组件 --&gt;</span> <span class="keyword">&lt;script</span> <span class="string">src="https://your-domain.netlify.app/verigate.js"</span><span class="keyword">&gt;&lt;/script&gt;</span> <span class="comment">&lt;!-- 创建容器 --&gt;</span> <span class="keyword">&lt;div</span> <span class="string">id="verigate-container"</span><span class="keyword">&gt;&lt;/div&gt;</span> <span class="comment">&lt;!-- 初始化组件 --&gt;</span> <span class="keyword">&lt;script&gt;</span> VeriGate.render(<span class="string">'#verigate-container'</span>, { siteKey: <span class="string">'your-site-key'</span>, theme: <span class="string">'light'</span>, onSuccess: <span class="keyword">function</span>(token) { console.log(<span class="string">'验证成功:'</span>, token); <span class="comment">// 在这里处理验证成功的逻辑</span> } }); <span class="keyword">&lt;/script&gt;</span></div></div><div id="js-tab" class="tab-content"><h3>JavaScript API</h3><div class="code-block"><span class="comment">// 渲染验证组件</span> <span class="keyword">const</span> sessionId = VeriGate.render(<span class="string">'#container'</span>, { siteKey: <span class="string">'your-site-key'</span>, theme: <span class="string">'light'</span>, <span class="comment">// 'light' | 'dark'</span> size: <span class="string">'normal'</span>, <span class="comment">// 'compact' | 'normal' | 'large'</span> onSuccess: <span class="keyword">function</span>(token) { <span class="comment">// 验证成功回调</span> console.log(<span class="string">'Token:'</span>, token); }, onError: <span class="keyword">function</span>(error) { <span class="comment">// 验证失败回调</span> console.error(<span class="string">'Error:'</span>, error); } }); <span class="comment">// 重置验证组件</span> VeriGate.reset(sessionId); <span class="comment">// 客户端验证令牌</span> VeriGate.verify(token, siteKey).then(<span class="keyword">function</span>(result) { console.log(<span class="string">'验证结果:'</span>, result); });</div></div><div id="server-tab" class="tab-content"><h3>服务端验证</h3><div class="code-block"><span class="comment">// Node.js 示例</span> <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">'https://your-domain.netlify.app/.netlify/functions/verify'</span>, { method: <span class="string">'POST'</span>, headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> }, body: JSON.stringify({ token: userToken, siteKey: <span class="string">'your-site-key'</span> }) }); <span class="keyword">const</span> result = <span class="keyword">await</span> response.json(); <span class="keyword">if</span> (result.success) { console.log(<span class="string">'验证成功'</span>, result.data); <span class="comment">// 处理验证成功的逻辑</span> } <span class="keyword">else</span> { console.error(<span class="string">'验证失败'</span>, result.error); <span class="comment">// 处理验证失败的逻辑</span> }</div></div></div></div><script src="./verigate.js"></script><script>// 存储会话ID和令牌
+        const sessions = {};
+
+        // 初始化所有演示组件
+        function initDemos() {
+            // 浅色主题
+            sessions.light = VeriGate.render('#verigate-light', {
+                siteKey: 'demo-light',
+                theme: 'light',
+                onSuccess: function(token) {
+                    showResult('light', 'success', `验证成功！\n令牌: ${token.substring(0, 50)}...`);
+                    sessions.lightToken = token;
+                },
+                onError: function(error) {
+                    showResult('light', 'error', `验证失败: ${error.message}`);
+                }
+            });
+
+            // 深色主题
+            sessions.dark = VeriGate.render('#verigate-dark', {
+                siteKey: 'demo-dark',
+                theme: 'dark',
+                onSuccess: function(token) {
+                    showResult('dark', 'success', `验证成功！\n令牌: ${token.substring(0, 50)}...`);
+                    sessions.darkToken = token;
+                },
+                onError: function(error) {
+                    showResult('dark', 'error', `验证失败: ${error.message}`);
+                }
+            });
+
+            // 紧凑尺寸
+            sessions.compact = VeriGate.render('#verigate-compact', {
+                siteKey: 'demo-compact',
+                theme: 'light',
+                size: 'compact',
+                onSuccess: function(token) {
+                    showResult('compact', 'success', `验证成功！\n令牌: ${token.substring(0, 50)}...`);
+                    sessions.compactToken = token;
+                },
+                onError: function(error) {
+                    showResult('compact', 'error', `验证失败: ${error.message}`);
+                }
+            });
+
+            // 大尺寸
+            sessions.large = VeriGate.render('#verigate-large', {
+                siteKey: 'demo-large',
+                theme: 'light',
+                size: 'large',
+                onSuccess: function(token) {
+                    showResult('large', 'success', `验证成功！\n令牌: ${token.substring(0, 50)}...`);
+                    sessions.largeToken = token;
+                },
+                onError: function(error) {
+                    showResult('large', 'error', `验证失败: ${error.message}`);
+                }
+            });
+        }
+
+        // 显示结果
+        function showResult(type, status, message) {
+            const resultElement = document.getElementById(`result-${type}`);
+            resultElement.className = `result ${status}`;
+            resultElement.textContent = message;
+            resultElement.style.display = 'block';
+        }
+
+        // 重置组件
+        function resetWidget(type) {
+            VeriGate.reset(sessions[type]);
+            const resultElement = document.getElementById(`result-${type}`);
+            resultElement.style.display = 'none';
+            sessions[`${type}Token`] = null;
+        }
+
+        // 验证令牌
+        async function verifyToken(type) {
+            const token = sessions[`${type}Token`];
+            if (!token) {
+                showResult(type, 'error', '请先完成验证');
+                return;
+            }
+
+            try {
+                const result = await VeriGate.verify(token, `demo-${type}`);
+                if (result.success) {
+                    showResult(type, 'success', `服务端验证成功！\n会话ID: ${result.data.sessionId}`);
+                } else {
+                    showResult(type, 'error', `服务端验证失败: ${result.error}`);
+                }
+            } catch (error) {
+                showResult(type, 'error', `验证请求失败: ${error.message}`);
+            }
+        }
+
+        // 标签切换
+        function showTab(tabName) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有标签的激活状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 显示选中的标签内容
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // 激活选中的标签
+            event.target.classList.add('active');
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initDemos);</script></body></html>

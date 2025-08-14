@@ -5,7 +5,7 @@ class VeriGate {
   constructor() {
     this.apiBase = window.location.hostname === 'localhost' 
       ? 'http://localhost:8888/.netlify/functions' 
-      : '/.netlify/functions';
+      : 'https://verigate1.netlify.app/.netlify/functions';
     this.challenges = ['slider', 'click', 'puzzle'];
     this.sessions = new Map();
   }
