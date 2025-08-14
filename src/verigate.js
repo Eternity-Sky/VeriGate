@@ -459,9 +459,7 @@ const veriGate = new VeriGate();
 
 // 导出API
 window.VeriGate = {
-  render: (selector, options) => veriGate.render(selector, options),
-  verify: (token, siteKey) => veriGate.verify(token, siteKey),
-  reset: (sessionId) => veriGate.reset(sessionId)
+    render: (selector, options) => veriGate.render(selector, options),
+    verify: (token, siteKey) => veriGate.verify(token, siteKey),
+    reset: (sessionId) => veriGate.reset(sessionId)
 };
-
-
