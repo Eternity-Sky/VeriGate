@@ -15,7 +15,7 @@
 ### 1. 在HTML中引入组件
 
 ```html
-<script src="https://your-domain.netlify.app/verigate.js"></script>
+<script src="https://verigate1.netlify.app/verigate.js"></script>
 <div id="verigate-container"></div>
 <script>
   VeriGate.render('#verigate-container', {
@@ -28,11 +28,12 @@
 </script>
 ```
 
+> **提示：** 你可以直接将上述代码嵌入到你的网页，无论你的网站部署在哪里，组件会自动连接 verigate1.netlify.app 的 API，无需任何额外配置。
 ### 2. 服务端验证
 
 ```javascript
 // 向API发送验证请求
-const response = await fetch('https://your-domain.netlify.app/.netlify/functions/verify', {
+const response = await fetch('https://verigate1.netlify.app/.netlify/functions/verify', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -43,6 +44,8 @@ const response = await fetch('https://your-domain.netlify.app/.netlify/functions
   })
 });
 ```
+
+> **提示：** API 已设置允许跨域（CORS），你可以在任意网站或后端直接请求，无需担心跨域问题。
 
 ## 项目结构
 

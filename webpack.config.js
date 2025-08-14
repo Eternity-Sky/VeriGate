@@ -5,6 +5,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: './src/verigate.js',
   output: {
+    library: 'VeriGate',
+    libraryTarget: 'window',
     path: path.resolve(__dirname, 'dist'),
     filename: 'verigate.js',
     library: 'VeriGate',

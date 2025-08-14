@@ -464,4 +464,6 @@ window.VeriGate = {
   reset: (sessionId) => veriGate.reset(sessionId)
 };
 
-export default veriGate;
+if (typeof window !== 'undefined') {
+  window.VeriGate = VeriGate;
+}
