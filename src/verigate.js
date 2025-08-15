@@ -166,6 +166,11 @@ class VeriGate {
       startX = e.clientX - thumb.offsetLeft;
       thumb.style.cursor = 'grabbing';
     });
+    thumb.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX - thumb.offsetLeft;
+      thumb.style.cursor = 'grabbing';
+    });
 
     document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
@@ -365,8 +370,24 @@ class VeriGate {
       // 标记会话为已解决
       session.solved = true;
       
-      // 调用成功回调
-      if (session.config.onSuccess) {
+      // 自动跳转模式
+      if (session.config.autoRedirect) {
+        try {
+          const res = await fetch(this.apiBase + '/verify', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ token, siteKey: session.config.siteKey })
+          });
+          const data = await res.json();
+          if (data.success) {
+            window.location.href = session.config.autoRedirect;
+          } else {
+            this.showError(widget, '验证失败，请重试');
+          }
+        } catch (e) {
+          this.showError(widget, '验证异常');
+        }
+      } else if (session.config.onSuccess) {
         session.config.onSuccess(token);
       }
       
