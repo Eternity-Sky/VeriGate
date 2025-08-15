@@ -12,8 +12,12 @@ class VeriGate {
 
   // 渲染验证组件
   render(selector, options = {}) {
+    if (window.VeriGate && window.VeriGate.debug) {
+      console.log('[VeriGate] render called:', selector, options);
+    }
     const container = document.querySelector(selector);
     if (!container) {
+      console.error('[VeriGate] 找不到选择器:', selector);
       throw new Error(`找不到选择器: ${selector}`);
     }
 
@@ -83,6 +87,9 @@ class VeriGate {
 
   // 绑定事件
   bindEvents(sessionId, container) {
+    if (window.VeriGate && window.VeriGate.debug) {
+      console.log('[VeriGate] bindEvents:', sessionId, container);
+    }
     const widget = container.querySelector(`[data-session="${sessionId}"]`);
     const checkbox = widget.querySelector('.verigate-checkbox-input');
     
@@ -342,13 +349,22 @@ class VeriGate {
   }
 
   // 完成验证
-  async completeVerification(sessionId) {
+async completeVerification(sessionId) {
+  if (window.VeriGate && window.VeriGate.debug) {
+    console.log('[VeriGate] completeVerification called:', sessionId);
+  }
     const session = this.sessions.get(sessionId);
     if (!session) return;
 
     try {
       // 生成验证令牌
       const token = await this.generateToken(sessionId, session.config.siteKey);
+      if (window.VeriGate && window.VeriGate.debug) {
+        console.log('[VeriGate] token generated:', token);
+      }
+    if (window.VeriGate && window.VeriGate.debug) {
+      console.log('[VeriGate] token generated:', token);
+    }
       
       // 更新UI
       const widget = document.querySelector(`[data-session="${sessionId}"]`);
@@ -372,6 +388,9 @@ class VeriGate {
       
       // 自动跳转模式
       if (session.config.autoRedirect) {
+      if (window.VeriGate && window.VeriGate.debug) {
+        console.log('[VeriGate] autoRedirect mode, verifying token and redirecting:', session.config.autoRedirect);
+      }
         try {
           const res = await fetch(this.apiBase + '/verify', {
             method: 'POST',
@@ -379,6 +398,9 @@ class VeriGate {
             body: JSON.stringify({ token, siteKey: session.config.siteKey })
           });
           const data = await res.json();
+          if (window.VeriGate && window.VeriGate.debug) {
+            console.log('[VeriGate] token verify result:', data);
+          }
           if (data.success) {
             window.location.href = session.config.autoRedirect;
           } else {
@@ -388,6 +410,9 @@ class VeriGate {
           this.showError(widget, '验证异常');
         }
       } else if (session.config.onSuccess) {
+        if (window.VeriGate && window.VeriGate.debug) {
+          console.log('[VeriGate] 调用 onSuccess 回调');
+        }
         session.config.onSuccess(token);
       }
       
