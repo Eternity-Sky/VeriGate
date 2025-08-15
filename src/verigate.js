@@ -214,14 +214,39 @@ class VeriGate {
 
   // 创建点击验证
   createClickChallenge(container, sessionId) {
-    const images = [
-      '🚗', '🚲', '🚌', '✈️', '🚢', '🚁', '🚂', '🏍️'
+    const clickChallengeBank = [
+      {
+        instruction: '点击所有的水果',
+        images: ['🍎', '🍌', '🍇', '🚗', '🍉', '🐶', '🍊', '🚲'],
+        targets: ['🍎', '🍌', '🍇', '🍉', '🍊']
+      },
+      {
+        instruction: '点击所有的动物',
+        images: ['🐶', '🐱', '🦁', '🍎', '🐼', '🚗', '🐸', '🍌'],
+        targets: ['🐶', '🐱', '🦁', '🐼', '🐸']
+      },
+      {
+        instruction: '点击所有的交通工具',
+        images: ['🚗', '🚲', '🚌', '✈️', '🚢', '🚁', '🚂', '🏍️'],
+        targets: ['🚗', '🚲', '🚌', '✈️', '🚢', '🚁', '🚂', '🏍️']
+      },
+      {
+        instruction: '点击所有的蔬菜',
+        images: ['🥕', '🍅', '🥦', '🍆', '🍎', '🚗', '🍌', '🥒'],
+        targets: ['🥕', '🍅', '🥦', '🍆', '🥒']
+      },
+      {
+        instruction: '点击所有的红色物品',
+        images: ['🍎', '🍒', '🍓', '🚗', '🍉', '🍌', '🐶', '🍊'],
+        targets: ['🍎', '🍒', '🍓', '🍉']
+      }
     ];
-    const targetImages = ['🚗', '🚌', '🚂']; // 需要点击的图片
-    
+    const idx = Math.floor(Math.random() * clickChallengeBank.length);
+    const { instruction, images, targets } = clickChallengeBank[idx];
+
     container.innerHTML = `
       <div class="verigate-click-challenge">
-        <div class="verigate-click-instruction">点击所有的交通工具</div>
+        <div class="verigate-click-instruction">${instruction}</div>
         <div class="verigate-click-grid">
           ${images.map((img, index) => `
             <div class="verigate-click-item" data-image="${img}" data-index="${index}">
@@ -233,7 +258,7 @@ class VeriGate {
       </div>
     `;
 
-    this.bindClickEvents(container, sessionId, targetImages);
+    this.bindClickEvents(container, sessionId, targets);
   }
 
   // 绑定点击验证事件
