@@ -509,3 +509,37 @@ window.VeriGate = {
     verify: (token, siteKey) => veriGate.verify(token, siteKey),
     reset: (sessionId) => veriGate.reset(sessionId)
 };
+
+// === VeriGate 全屏验证集成脚本 ===
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('a.verigate-redirect, button.verigate-redirect').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      var url = el.getAttribute('href') || el.dataset.url;
+      if(url){
+        e.preventDefault();
+        // 插入全屏遮罩
+        if(!document.getElementById('verigate-fullscreen-mask')){
+          var mask = document.createElement('div');
+          mask.id = 'verigate-fullscreen-mask';
+          mask.style = 'position:fixed;left:0;top:0;width:100vw;height:100vh;background:#fff;z-index:99998;';
+          document.body.appendChild(mask);
+        }
+        // 隐藏页面主内容
+        Array.from(document.body.children).forEach(function(node){
+          if(node.id !== 'verigate-fullscreen-mask' && node.id !== 'verigate-container'){
+            if(node.style) node.style.display = 'none';
+          }
+        });
+        // 插入验证容器
+        if(!document.getElementById('verigate-container')){
+          var div = document.createElement('div');
+          div.id = 'verigate-container';
+          div.style = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:99999;background:#fff;border-radius:8px;box-shadow:0 2px 16px rgba(0,0,0,0.15);';
+          document.body.appendChild(div);
+        }
+        window.VeriGate.render('#verigate-container', { autoRedirect: url, mode: 'slider' });
+      }
+    });
+  });
+});
+// === VeriGate 全屏验证集成脚本 END ===
